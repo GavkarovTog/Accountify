@@ -1,4 +1,13 @@
+import 'package:accountify/accounts_tab.dart';
+import 'package:accountify/categories_tab.dart';
 import 'package:flutter/material.dart';
+
+class NavigationTab {
+  String name;
+  Widget tab;
+
+  NavigationTab({required this.name, required this.tab});
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,6 +18,26 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _tabIndex = 1;
+  late NavigationTab _currentTab = tabs[_tabIndex];
+
+  List<NavigationTab> tabs = [
+    NavigationTab(
+      name: "Счета",
+      tab: AccountsTab()
+    ),
+    NavigationTab(
+      name: "Категории",
+      tab: CategoriesTab()
+    ),
+    NavigationTab(
+      name: "Счет",
+      tab: AccountsTab()
+    ),
+    NavigationTab(
+      name: "Счет",
+      tab: AccountsTab()
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +49,7 @@ class _HomePageState extends State<HomePage> {
             //   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40))
             // ),
             leading: IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
-            title: Text("Accountify"),
+            title: const Text("Accountify"),
           ),
           ClipRRect(
             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
@@ -34,10 +63,11 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(40)
                 ),
-                child: const Text("Счета", style: TextStyle(fontSize: 20)),
+                child: Text(_currentTab.name, style: TextStyle(fontSize: 20)),
               ),
             ),
-          )
+          ),
+          _currentTab.tab
         ],
       ),
       bottomNavigationBar: ClipRRect(
@@ -49,7 +79,10 @@ class _HomePageState extends State<HomePage> {
             NavigationDestination(icon: Icon(Icons.edit_note_outlined), selectedIcon: Icon(Icons.edit_note_outlined, color: Colors.black), label: "Записи"),
             NavigationDestination(icon: Icon(Icons.analytics), selectedIcon: Icon(Icons.analytics, color: Colors.black), label: "Анализ"),
           ],
-          onDestinationSelected: (int index) => setState(() => _tabIndex = index),
+          onDestinationSelected: (int index) => setState(() {
+            _tabIndex = index;
+            _currentTab = tabs[_tabIndex];
+          } ),
         
           selectedIndex: _tabIndex,
           backgroundColor: Colors.black,

@@ -1,7 +1,7 @@
 import 'package:accountify/home_page.dart';
 import 'package:flutter/material.dart';
 
-// Don't forget to try Autocomplete widget!
+// TODO: Don't forget to try Autocomplete widget!
 void main() {
   runApp(const AccountifyApp());
 }
@@ -13,12 +13,12 @@ class AccountifyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: Theme.of(context).copyWith(
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
           centerTitle: true
         ),
-        navigationBarTheme: NavigationBarThemeData(
+        navigationBarTheme: const NavigationBarThemeData(
           labelTextStyle: MaterialStatePropertyAll(
             TextStyle(
               color: Colors.white
