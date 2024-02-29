@@ -42,33 +42,43 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          AppBar(
-            // shape: RoundedRectangleBorder(
-            //   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40))
-            // ),
-            leading: IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
-            title: const Text("Accountify"),
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              color: Colors.black,
-              height: 50,
+      appBar: AppBar(
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40))
+        // ),
+        leading: IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+        title: const Text("Accountify"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppBar(
+              // shape: RoundedRectangleBorder(
+              //   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40))
+              // ),
+              leading: IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+              title: const Text("Accountify"),
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
               child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(40)
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                color: Colors.black,
+                height: 50,
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(40)
+                  ),
+                  child: Text(_currentTab.name, style: TextStyle(fontSize: 20)),
                 ),
-                child: Text(_currentTab.name, style: TextStyle(fontSize: 20)),
               ),
             ),
-          ),
-          _currentTab.tab
-        ],
+            _currentTab.tab
+          ],
+        ),
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
@@ -82,7 +92,7 @@ class _HomePageState extends State<HomePage> {
           onDestinationSelected: (int index) => setState(() {
             _tabIndex = index;
             _currentTab = tabs[_tabIndex];
-          } ),
+          }),
         
           selectedIndex: _tabIndex,
           backgroundColor: Colors.black,
