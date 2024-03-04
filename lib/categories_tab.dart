@@ -32,7 +32,7 @@ class CategoriesTab extends StatelessWidget {
     return ListView(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 30),
       children: [
         const SizedBox(height: 20,),
         Text("Категории дохода", style: Theme.of(context).textTheme.titleMedium),

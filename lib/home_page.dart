@@ -1,5 +1,6 @@
 import 'package:accountify/accounts_tab.dart';
 import 'package:accountify/categories_tab.dart';
+import 'package:accountify/records_tab.dart';
 import 'package:flutter/material.dart';
 
 class NavigationTab {
@@ -17,8 +18,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _tabIndex = 1;
+  int _tabIndex = 2;
   late NavigationTab _currentTab = tabs[_tabIndex];
+  bool isSearchBarOpened = false;
 
   List<NavigationTab> tabs = [
     NavigationTab(
@@ -30,8 +32,8 @@ class _HomePageState extends State<HomePage> {
       tab: CategoriesTab()
     ),
     NavigationTab(
-      name: "Счет",
-      tab: AccountsTab()
+      name: "Записи",
+      tab: RecordsTab()
     ),
     NavigationTab(
       name: "Счет",
@@ -43,39 +45,63 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // shape: RoundedRectangleBorder(
-        //   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40))
-        // ),
+        actions: (_tabIndex == 2) ? [
+          IconButton(onPressed: () {
+            setState(() {
+              isSearchBarOpened = true;
+            });
+          },
+          icon: Icon(Icons.search))
+        ] : [],
         leading: IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
-        title: const Text("Accountify"),
+        title: isSearchBarOpened ? TextField(
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+            color: Colors.white
+          ),
+          cursorColor: Colors.white,
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: "Поиск...",
+            hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: Colors.white
+            ),
+
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.white
+              )
+            ),
+
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.white
+              )
+            )
+          ),
+        ) : const Text("Accountify"),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40))
+            ),
+            height: 50,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(40)
+              ),
+              child: Text(_currentTab.name, style: TextStyle(fontSize: 20)),
+            ),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AppBar(
-              // shape: RoundedRectangleBorder(
-              //   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40))
-              // ),
-              leading: IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
-              title: const Text("Accountify"),
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                color: Colors.black,
-                height: 50,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(40)
-                  ),
-                  child: Text(_currentTab.name, style: TextStyle(fontSize: 20)),
-                ),
-              ),
-            ),
             _currentTab.tab
           ],
         ),
