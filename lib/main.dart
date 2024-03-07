@@ -1,9 +1,10 @@
 import 'package:accountify/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 // TODO: Don't forget to try Autocomplete widget!
 void main() {
-  runApp(const AccountifyApp());
+  initializeDateFormatting("ru_RU", null).then((_) => runApp(const AccountifyApp()));
 }
 
 class AccountifyApp extends StatelessWidget {
@@ -70,9 +71,19 @@ class AccountifyApp extends StatelessWidget {
             ),
           )
         ),
+        chipTheme: ChipThemeData(
+          labelStyle: Theme.of(context).textTheme.labelMedium,
+          padding: EdgeInsets.all(0)
+        ),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: Colors.black
         ),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: MaterialStatePropertyAll(Colors.black),
+            overlayColor: MaterialStatePropertyAll(Colors.white),
+          )
+        )
       ),
       debugShowCheckedModeBanner: false,
       home: const HomePage(),
