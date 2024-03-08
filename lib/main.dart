@@ -1,3 +1,4 @@
+import 'package:accountify/calculator_page.dart';
 import 'package:accountify/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -83,10 +84,16 @@ class AccountifyApp extends StatelessWidget {
             foregroundColor: MaterialStatePropertyAll(Colors.black),
             overlayColor: MaterialStatePropertyAll(Colors.white),
           )
+        ),
+        filledButtonTheme: FilledButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.black),
+            foregroundColor: MaterialStatePropertyAll(Colors.white),
+          )
         )
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const CalculatorPage(),
     );
   }
 }

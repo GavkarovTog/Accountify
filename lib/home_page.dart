@@ -26,6 +26,8 @@ class _HomePageState extends State<HomePage> {
   late NavigationTab _currentTab = tabs[_tabIndex];
   bool isSearchBarOpened = false;
 
+  // TODO: it's possible to use title builder and actions builder
+  // to make app bar more flexible
   List<NavigationTab> tabs = [
     NavigationTab(headerBuilder: () => "Счета", tab: AccountsTab()),
     NavigationTab(headerBuilder: () => "Категории", tab: CategoriesTab()),
@@ -49,7 +51,44 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: Drawer(),
+      drawer: SafeArea(
+        child: Drawer(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Column(
+              children: [
+                Text("Настройки", style: Theme.of(context).textTheme.titleLarge),
+
+                ListTile(
+                  title: Text("Период расчета"),
+                  subtitle: Text("Месяц"),
+                  trailing: FilledButton(
+                    onPressed: () {},
+                    child: Text("Изменить"),
+                  ),
+                ),
+
+                ListTile(
+                  title: Text("Рабочая валюта"),
+                  subtitle: Text("Белорусский рубль"),
+                  trailing: FilledButton(
+                    onPressed: () {},
+                    child: Text("Изменить"),
+                  ),
+                ),
+
+                ListTile(
+                  title: Text("Режим Бюджета"),
+                  trailing: Switch(
+                    value: false,
+                    onChanged: (val) {},
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       endDrawer: SafeArea(
         child: Drawer(
           child: Padding(
@@ -167,6 +206,8 @@ class _HomePageState extends State<HomePage> {
               _scaffoldKey.currentState!.openDrawer();
             },
             icon: Icon(Icons.settings)),
+
+        // TODO: Filtration on defined account(wallet)
         title: isSearchBarOpened
             ? Stack(
                 children: [
@@ -194,6 +235,21 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () {}, icon: Icon(Icons.mic_rounded)))
                 ],
               )
+            : _tabIndex == 3 ? Container(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("По всем счетам", style: Theme.of(context).textTheme.labelLarge),
+              Icon(Icons.arrow_drop_down_outlined, color: Colors.black,)
+            ],
+          )
+        )
+
             : const Text("Accountify"),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50),
