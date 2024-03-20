@@ -4,8 +4,17 @@ import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 
-class CalculatorPage extends StatelessWidget {
+import 'utils/calculator/calculator.dart';
+
+class CalculatorPage extends StatefulWidget {
   const CalculatorPage({super.key});
+
+  @override
+  State<CalculatorPage> createState() => _CalculatorPageState();
+}
+
+class _CalculatorPageState extends State<CalculatorPage> {
+  Calculator calculator = Calculator();
 
   Widget _createButton(
       {
@@ -68,6 +77,11 @@ class CalculatorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String arithmeticToDisplay = calculator.toDisplay();
+    if (arithmeticToDisplay.length > 12) {
+      arithmeticToDisplay = "..." + arithmeticToDisplay.substring(arithmeticToDisplay.length - 12);
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -124,9 +138,19 @@ class CalculatorPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 3),
                 color: Colors.black,
                 child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: Colors.black,
-                      border: Border.all(color: Colors.white)),
+                      border: Border.all(color: Colors.white),
+                  ),
+                  child: Text(
+                    arithmeticToDisplay,
+                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                      color: Colors.white
+                    ),
+                    maxLines: 1,
+                  )
                 ),
               ),
               TextField(
@@ -143,16 +167,44 @@ class CalculatorPage extends StatelessWidget {
               ),
               Row(children: [
                 _createButton(icon: FontAwesome5.divide, black: true),
-                _createButton(onPressed: () {}, label: "7"),
-                _createButton(label: "8"),
-                _createButton(label: "9"),
-                _createButton(icon: Icons.backspace, black: true),
+                _createButton(onPressed: () {
+                  setState(() {
+                    calculator.numb(7);
+                  });
+                }, label: "7"),
+                _createButton(onPressed: () {
+                  setState(() {
+                    calculator.numb(8);
+                  });
+                }, label: "8"),
+                _createButton(onPressed: () {
+                  setState(() {
+                    calculator.numb(9);
+                  });
+                }, label: "9"),
+                _createButton(onPressed: () {
+                  setState(() {
+                    calculator.back();
+                  });
+                }, icon: Icons.backspace, black: true),
               ]),
               Row(children: [
                 _createButton(icon: FontAwesome5.times, black: true),
-                _createButton(label: "4"),
-                _createButton(label: "5"),
-                _createButton(label: "6"),
+                _createButton(onPressed: () {
+                  setState(() {
+                    calculator.numb(4);
+                  });
+                }, label: "4"),
+                _createButton(onPressed: () {
+                  setState(() {
+                    calculator.numb(5);
+                  });
+                }, label: "5"),
+                _createButton(onPressed: () {
+                  setState(() {
+                    calculator.numb(6);
+                  });
+                }, label: "6"),
                 _createButton(icon: FontAwesome5.calendar_alt, black: true),
               ]),
               LayoutBuilder(
@@ -168,9 +220,21 @@ class CalculatorPage extends StatelessWidget {
                                       icon: FontAwesome5.minus,
                                       black: true,
                                     ),
-                                    _createButton(label: "1"),
-                                    _createButton(label: "2"),
-                                    _createButton(label: "3"),
+                                    _createButton(onPressed: () {
+                                      setState(() {
+                                        calculator.numb(1);
+                                      });
+                                    }, label: "1"),
+                                    _createButton(onPressed: () {
+                                      setState(() {
+                                        calculator.numb(2);
+                                      });
+                                    }, label: "2"),
+                                    _createButton(onPressed: () {
+                                      setState(() {
+                                        calculator.numb(3);
+                                      });
+                                    }, label: "3"),
                                   ],
                                 ),
                                 Row(
@@ -181,8 +245,16 @@ class CalculatorPage extends StatelessWidget {
                                     ),
                                     SizedBox(
                                         width: constraints.maxWidth * 2 / 5,
-                                        child: _createButton(label: "0")),
-                                    _createButton(label: "."),
+                                        child: _createButton(onPressed: () {
+                                          setState(() {
+                                            calculator.numb(0);
+                                          });
+                                        }, label: "0")),
+                                    _createButton(onPressed: () {
+                                      setState(() {
+                                        calculator.dot();
+                                      });
+                                    },label: "."),
                                   ],
                                 ),
                               ],

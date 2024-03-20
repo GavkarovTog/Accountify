@@ -1,3 +1,10 @@
+import 'dart:typed_data';
+
+enum OperandType {
+  firstOperand,
+  secondOperand
+}
+
 abstract class OperandOperations {
   void numb(int digit);
   void dot();
@@ -31,6 +38,7 @@ class ZeroState extends OperandState {
 
   @override
   void dot() {
+    operand.strRepr = "0.";
     operand.currentState = operand.zeroRationalState;
   }
 }
@@ -73,12 +81,11 @@ class ZeroRationalState extends OperandState {
 
   @override
   void back() {
-    operand.strRepr = operand.strRepr.substring(0, operand.strRepr.length - 1);
-
     if (operand.strRepr.endsWith(".")) {
-      operand.strRepr = "0";
       operand.currentState = operand.zeroState;
     }
+
+    operand.strRepr = operand.strRepr.substring(0, operand.strRepr.length - 1);
   }
 }
 
@@ -100,11 +107,60 @@ class NonZeroRationalState extends OperandState {
   }
 }
 
+class EmptyState extends OperandState {
+  EmptyState(super.operand);
+
+  @override
+  void numb(int digit) {
+    super.numb(digit);
+
+    if (digit == 0) {
+      operand.strRepr = "0";
+      operand.currentState = operand.zeroState;
+    } else {
+      operand.strRepr = digit.toString();
+      operand.currentState = operand.nonZeroState;
+    }
+  }
+}
+
+class ZeroWithEmptyState extends ZeroState {
+  ZeroWithEmptyState(super.operand);
+
+  @override
+  void back() {
+    operand.strRepr = "";
+    operand.currentState = operand.emptyState!;
+  }
+}
+
+class NonZeroWithEmptyState extends NonZeroState {
+  NonZeroWithEmptyState(super.operand);
+
+  @override
+  void back() {
+    operand.strRepr = operand.strRepr.substring(0, operand.strRepr.length - 1);
+
+    if (operand.strRepr.isEmpty) {
+      operand.currentState = operand.emptyState!;
+    }
+  }
+}
+
 class Operand implements OperandOperations {
   String strRepr = "0";
+  Operand(OperandType type) {
+    if (type == OperandType.secondOperand) {
+      emptyState = EmptyState(this);
+      zeroState = ZeroWithEmptyState(this);
+      nonZeroState = NonZeroWithEmptyState(this);
+      strRepr = "";
+    }
+  }
 
   late OperandState currentState = zeroState;
 
+  late OperandState? emptyState;
   late OperandState zeroState = ZeroState(this);
   late OperandState nonZeroState = NonZeroState(this);
   late OperandState zeroRationalState = ZeroRationalState(this);
