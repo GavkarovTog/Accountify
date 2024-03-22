@@ -24,6 +24,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
       double? width,
       double? height = 60,
       void Function()? onPressed,
+      void Function()? onLongPressed,
       }) {
     if (label == null && icon == null) {
       throw UnsupportedError("Button must contain anything");
@@ -38,6 +39,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
       child: Material(
         color: background,
         child: InkWell(
+          onLongPress: onLongPressed,
           onTap: onPressed,
           child: Container(
             alignment: Alignment.center,
@@ -78,7 +80,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   @override
   Widget build(BuildContext context) {
     String arithmeticToDisplay = calculator.toDisplay();
-    if (arithmeticToDisplay.length > 12) {
+    if (arithmeticToDisplay.length > 18) {
       arithmeticToDisplay = "..." + arithmeticToDisplay.substring(arithmeticToDisplay.length - 12);
     }
 
@@ -135,7 +137,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
               ),
               Container(
                 height: 70,
-                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 3),
+                // padding: EdgeInsets.symmetric(vertical: 5, horizontal: 3),
                 color: Colors.black,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 30),
@@ -166,7 +168,11 @@ class _CalculatorPageState extends State<CalculatorPage> {
                         borderRadius: BorderRadius.circular(0))),
               ),
               Row(children: [
-                _createButton(icon: FontAwesome5.divide, black: true),
+                _createButton(onPressed: () {
+                  setState(() {
+                    calculator.divide();
+                  });
+                }, icon: FontAwesome5.divide, black: true),
                 _createButton(onPressed: () {
                   setState(() {
                     calculator.numb(7);
@@ -182,14 +188,22 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     calculator.numb(9);
                   });
                 }, label: "9"),
-                _createButton(onPressed: () {
-                  setState(() {
-                    calculator.back();
-                  });
-                }, icon: Icons.backspace, black: true),
+                _createButton(
+                  onPressed: () {
+                    setState(() {
+                      calculator.back();
+                    });
+                  },
+                  onLongPressed: () {
+
+                  }, icon: Icons.backspace, black: true),
               ]),
               Row(children: [
-                _createButton(icon: FontAwesome5.times, black: true),
+                _createButton(onPressed: () {
+                  setState(() {
+                    calculator.times();
+                  });
+                }, icon: FontAwesome5.times, black: true),
                 _createButton(onPressed: () {
                   setState(() {
                     calculator.numb(4);
@@ -217,6 +231,11 @@ class _CalculatorPageState extends State<CalculatorPage> {
                                 Row(
                                   children: [
                                     _createButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          calculator.minus();
+                                        });
+                                      },
                                       icon: FontAwesome5.minus,
                                       black: true,
                                     ),
@@ -240,6 +259,11 @@ class _CalculatorPageState extends State<CalculatorPage> {
                                 Row(
                                   children: [
                                     _createButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          calculator.plus();
+                                        });
+                                      },
                                       icon: FontAwesome5.plus,
                                       black: true,
                                     ),
@@ -261,10 +285,15 @@ class _CalculatorPageState extends State<CalculatorPage> {
                             ),
                           ),
                           _createButton(
-                              icon: FontAwesome5.equals,
-                              black: true,
-                              width: constraints.maxWidth * 1 / 5,
-                              height: 120),
+                            onPressed: () {
+                              setState(() {
+                                calculator.equals();
+                              });
+                            },
+                            icon: FontAwesome5.equals,
+                            black: true,
+                            width: constraints.maxWidth * 1 / 5,
+                            height: 120),
                         ],
                       ))
             ],

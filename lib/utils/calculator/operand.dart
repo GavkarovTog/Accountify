@@ -1,14 +1,12 @@
-import 'dart:typed_data';
-
-enum OperandType {
-  firstOperand,
-  secondOperand
-}
-
 abstract class OperandOperations {
   void numb(int digit);
   void dot();
   void back();
+
+  void divide();
+  void times();
+  void minus();
+  void plus();
 }
 
 abstract class OperandState implements OperandOperations {
@@ -23,6 +21,11 @@ abstract class OperandState implements OperandOperations {
 
   void dot() {}
   void back() {}
+
+  void divide() {}
+  void times() {}
+  void minus() {}
+  void plus() {}
 }
 
 class ZeroState extends OperandState {
@@ -87,6 +90,33 @@ class ZeroRationalState extends OperandState {
 
     operand.strRepr = operand.strRepr.substring(0, operand.strRepr.length - 1);
   }
+
+  void _operation() {
+    if (operand.strRepr.endsWith(".")) {
+      operand.strRepr = operand.strRepr.substring(0, operand.strRepr.length - 1);
+      operand.currentState = operand.zeroState;
+    }
+  }
+
+  @override
+  void plus() {
+    _operation();
+  }
+
+  @override
+  void minus() {
+    _operation();
+  }
+
+  @override
+  void divide() {
+    _operation();
+  }
+
+  @override
+  void times() {
+    _operation();
+  }
 }
 
 class NonZeroRationalState extends OperandState {
@@ -105,62 +135,40 @@ class NonZeroRationalState extends OperandState {
     }
     operand.strRepr = operand.strRepr.substring(0, operand.strRepr.length - 1);
   }
-}
 
-class EmptyState extends OperandState {
-  EmptyState(super.operand);
-
-  @override
-  void numb(int digit) {
-    super.numb(digit);
-
-    if (digit == 0) {
-      operand.strRepr = "0";
-      operand.currentState = operand.zeroState;
-    } else {
-      operand.strRepr = digit.toString();
+  void _operation() {
+    if (operand.strRepr.endsWith(".")) {
+      operand.strRepr = operand.strRepr.substring(0, operand.strRepr.length - 1);
       operand.currentState = operand.nonZeroState;
     }
   }
-}
-
-class ZeroWithEmptyState extends ZeroState {
-  ZeroWithEmptyState(super.operand);
 
   @override
-  void back() {
-    operand.strRepr = "";
-    operand.currentState = operand.emptyState!;
+  void plus() {
+    _operation();
   }
-}
-
-class NonZeroWithEmptyState extends NonZeroState {
-  NonZeroWithEmptyState(super.operand);
 
   @override
-  void back() {
-    operand.strRepr = operand.strRepr.substring(0, operand.strRepr.length - 1);
+  void minus() {
+    _operation();
+  }
 
-    if (operand.strRepr.isEmpty) {
-      operand.currentState = operand.emptyState!;
-    }
+  @override
+  void divide() {
+    _operation();
+  }
+
+  @override
+  void times() {
+    _operation();
   }
 }
 
 class Operand implements OperandOperations {
   String strRepr = "0";
-  Operand(OperandType type) {
-    if (type == OperandType.secondOperand) {
-      emptyState = EmptyState(this);
-      zeroState = ZeroWithEmptyState(this);
-      nonZeroState = NonZeroWithEmptyState(this);
-      strRepr = "";
-    }
-  }
 
   late OperandState currentState = zeroState;
 
-  late OperandState? emptyState;
   late OperandState zeroState = ZeroState(this);
   late OperandState nonZeroState = NonZeroState(this);
   late OperandState zeroRationalState = ZeroRationalState(this);
@@ -179,5 +187,25 @@ class Operand implements OperandOperations {
   @override
   void numb(int digit) {
     currentState.numb(digit);
+  }
+
+  @override
+  void divide() {
+    currentState.divide();
+  }
+
+  @override
+  void minus() {
+    currentState.minus();
+  }
+
+  @override
+  void plus() {
+    currentState.plus();
+  }
+
+  @override
+  void times() {
+    currentState.times();
   }
 }
